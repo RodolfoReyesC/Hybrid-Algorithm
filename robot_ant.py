@@ -28,8 +28,8 @@ class robot_ant:
         path = "stl"
         color = ["white", "blue"]
         omni3 = pO.Omnirobot(path,color)
-        xmin, xmax = 0, self.size
-        ymin, ymax = 0, self.size
+        xmin, xmax = 0, self.size[0]
+        ymin, ymax = 0, self.size[1]
         zmin, zmax = 0, 0
         bounds = [xmin, xmax, ymin, ymax, zmin, zmax]
         escala = 4

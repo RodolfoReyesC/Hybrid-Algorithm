@@ -6,18 +6,28 @@ Created on Tue Sep 24 11:27:03 2024
 """
 
 from aco_pso import ACO_PSO
-import robot_ant as r_ant
+from animation import AnimationACO
 # ----------------------------- ACO/PSO ----------------------------- #
 initial_point = [0, 0]
-final_point = [9,8]
-n_ants = 350
+final_point = [2,3.5]
+n_ants = 100
 n_iterations = 10
-size = 10
+size = [2,4]
 
 aco_pso = ACO_PSO(initial_point, final_point, n_ants, n_iterations, size)
 ants = aco_pso.run_ACO_PSO()
-best_path, best_length = aco_pso.best_path, aco_pso.best_length
+# ------------------------- Pruebas con Vicon --------------------------- #
+# Escogeremos 3 mejores opciones para así probar en 3 robots.
+top_2_ants = sorted(ants, key=lambda ant: ant.cost)[:3]
+ant1, ant2 = top_2_ants[0], top_2_ants[2]
 
-aco_pso.draw_ACO_PSO2D()
-robots = r_ant.robot_ant(0.1, initial_point, final_point, size)
-robots.draw_path(best_path)
+aco_pso.draw_ACOPSO2D(ant1.path, ant1.cost)
+aco_pso.draw_ACOPSO2D(ant2.path, ant2.cost)
+aco_pso.draw_ACOPSO2D(aco_pso.best_path, aco_pso.best_length)
+
+# --------------------- Animación de una vista 2D ------------------------ #
+paths = [ant1.path, ant2.path, aco_pso.best_path]
+offsets = [0, 100, 200]
+animation = AnimationACO(paths, offsets)
+animation.show()
+
