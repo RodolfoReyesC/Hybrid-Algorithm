@@ -21,7 +21,7 @@ class robot_ant:
         self.point1 = point1
         self.point2 = point2
         self.size = size
-        
+    
     def draw_path(self, route):
         hx, hy, phi = [], [], 0
         # Generate points along the line from point0 to each point in points

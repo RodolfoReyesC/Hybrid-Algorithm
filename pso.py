@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Sep 24 11:22:50 2024
+Created on Sat Jan 18 12:46:18 2025
 
 @author: Rodolfo Alberto Reyes Corona
 """
@@ -16,7 +16,7 @@ class Particle:
         self.position = np.random.uniform(var_min, var_max, variables)
         self.velocity = np.random.uniform(-1, 1, variables)
         self.best_position = self.position.copy()
-        self.best_cost = initial_cost  # Inicializar el mejor costo con el valor proporcionado
+        self.best_cost = initial_cost     # Inicializar el mejor costo con el valor proporcionado
         self.current_cost = initial_cost  # Inicializar el costo actual con el valor proporcionado
 
     def update(self, global_best_position, w, c1, c2):
@@ -33,11 +33,11 @@ class ParticleSwarmOptimizer:
         self.particles = [Particle(var_min, var_max, variables, initial_cost, current_cost) for _ in range(num_particles)]
         self.global_best = min(self.particles, key=lambda x: x.best_cost)
         self.num_iterations = num_iterations
-        self.w = 1.0
+        self.w  = 1.0
         self.c1 = 2.0
         self.c2 = 2.0
         self.particle_positions = []
-        
+    
     def optimize(self):
         for iteration in range(self.num_iterations):
             iteration_positions = []  # Lista para almacenar las posiciones de las partículas en la iteración actual
@@ -54,3 +54,5 @@ class ParticleSwarmOptimizer:
 
     def get_best_position(self):
         return self.global_best.best_position
+
+

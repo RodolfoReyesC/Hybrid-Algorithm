@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Sep 24 11:25:12 2024
+Created on Sat Jan 18 12:46:18 2025
 
 @author: Rodolfo Alberto Reyes Corona
 """
@@ -41,7 +41,7 @@ class ACO_PSO:
             alpha (int or float): Exponenet on pheromone, higher alpha gives pheromone more weight. Firs iteration = random
             beta (int or float): Exponent on distance, higher beta give distance more weight. First iteration = random
         Example:
-            hybrid_algorithm = ACO_PSO([0,0], [5,5], 100, 10, 10)          
+            hybrid_algorithm = ACO_PSO([0,0], [5,5], 100, 10, 10)
         """ 
         self.initial_point = initial_point
         self.final_point = final_point
@@ -53,12 +53,12 @@ class ACO_PSO:
         self.best_path = None
         self.best_length = np.inf
         self.alpha = np.random.uniform(0,1)
-        self.beta = np.random.uniform(0,1)
+        self.beta  = np.random.uniform(0,1)
 
         x_i, x_f = 0, self.size[0] + 0.01
         y_i, y_f = 0, self.size[1] + 0.01
-        x = list(np.arange(x_i, x_f, 0.5))  # Cambié np.linspace por np.arange para 0.5
-        y = list(np.arange(y_i, y_f, 0.5))  # Lo mismo para el eje y
+        x = list(np.arange(x_i, x_f, 0.5))
+        y = list(np.arange(y_i, y_f, 0.5))  
         self.X, self.Y = np.meshgrid(x, y)
 
     def euclidean_distance(self, point_1, point_2):
@@ -66,10 +66,10 @@ class ACO_PSO:
         x_2, y_2 = point_2
         d = (x_2 - x_1) ** 2 + (y_2 - y_1) ** 2
         return np.sqrt(d)
-    
+
     # Esta función proporciona los nodos posibles en una relación de distancia mínima
     def possible_options_nodes(self, node):
-        min_distance = 0.707  # Ajusté la distancia mínima a 0.707 (aproximadamente sqrt(2) * 0.5)
+        min_distance = 0.8  # Ajusté la distancia mínima a 0.707 (aproximadamente sqrt(2) * 0.5)
         options = []
         for i in range(self.X.shape[0]):  # Cambié self.size[0] a self.X.shape[0] para asegurarme de iterar sobre la malla
             for j in range(self.Y.shape[1]):  # Igual para el eje Y
@@ -78,7 +78,7 @@ class ACO_PSO:
                 if 0 < distance <= min_distance:  # Comprobamos que la distancia sea mayor que 0 y menor o igual a min_distance
                     options.append(possible_new_node)
         return options    
-    
+
     # Choose new node function provide a new node based in the probability equation.
     def choose_new_node(self, node, nodes_options, pheromones, alpha, beta):
         probabilities = []
@@ -134,14 +134,21 @@ class ACO_PSO:
                 ant.reset()
                 actual_node = self.initial_point
                 step = 0
+                previous_node = []
                 
                 while True:
                     # Search possible options nodes
                     options = self.possible_options_nodes(actual_node)
+                    if(step > 1):
+                        for option in options:
+                            if(option == previous_node):
+                                options.remove(option)
+                    
                     # Get the value of the pheromones
                     pheromones = self.get_pheromones(options, actual_node)
                     # Choose a new node using the possible optines and values
                     new_node = self.choose_new_node(actual_node, options, pheromones, self.alpha, self.beta)
+                    previous_node = actual_node
                     distance = self.euclidean_distance(actual_node, new_node)
                     ant.move_to(new_node, distance)
                     actual_node = new_node
@@ -164,7 +171,7 @@ class ACO_PSO:
                 current_cost = np.inf
             else:
                 current_cost = self.best_length
-            
+
             # The PSO algorithm is provided with a mathematical function and reaches its global minimum, however, 
             # here we do not have an associated function, so the results obtained in ACO are taken and in this way, 
             # it is assumed that it converged to the global minimum.
